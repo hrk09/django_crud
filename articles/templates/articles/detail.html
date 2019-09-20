@@ -7,6 +7,25 @@
   <p>작성일 : {{ article.created_at }}</p>
   <hr>
   <p>{{ article.content }}</p>
+  <hr>
+  <h4>Comments</h4>
+  {% comment %} 댓글 작성을 위한 form 작업 {% endcomment %}
+  <form action=" {% url 'articles:comments_create' article.pk %} " method="POST">
+    {% csrf_token %}
+    <input type="text" name="content">
+    <button type="submit">댓글달기</button>
+  </form>
+
+  {% comment %} 여러개의 데이터를 돌면서 하나씩 표시 {% endcomment %}
+  <ul>
+  {% for comment in comments %}
+    <li>{{ comment.content }}</li>
+  {% empty %}
+    <p>아직 댓글이 없어영 :(</p>
+  {% endfor %}
+  </ul>
+  
+  <hr>
   <a href=" {% url 'articles:index' %} ">[뒤로가기]</a>
   <a href="{% url 'articles:update' article.pk %} ">[수정하기]</a>
   <form action="{% url 'articles:delete' article.pk %}" method="POST" onclick="return confirm('R U SUE?')">

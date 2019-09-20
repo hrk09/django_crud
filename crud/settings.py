@@ -35,6 +35,10 @@ INSTALLED_APPS = [
     'articles',
     'jobs',
 
+    # Third pary apps
+    'django_extensions',
+
+    # Django apps
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',

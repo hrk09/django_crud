@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect, get_object_or_404
 # redirect 를 통해 article 저장 후 어떤 인덱스 페이지로 이동하세요
-from .models import Article
+from .models import Article, Comment
 
 # Create your views here.
 
@@ -25,7 +25,7 @@ def create(request):
         # articles/new/의 new.html의 form에서 전달받은 데이터들
         title = request.POST.get('title')
         content = request.POST.get('content')
-        article = Article()
+        # article = Article()
         article = Article(title=title, content=content)
         article.save()
         # article이 생성되면, pk를 쓸 수 있으니까, 해당 pk의 상세페이지 보여주기
@@ -52,8 +52,14 @@ def detail(request, article_pk):
     # SELECT * FROM articles WHERE pk=3와 같은 의미
     # article = Article.objects.get(pk=article_pk)
 
+    # 데이터 꺼내는 작업
+    comments = article.comment_set.all()
+
     # pk 번호 맞춰서 데이터 가져온다
-    context = {'article': article}
+    context = {
+        'article': article,
+        'comments': comments,
+    }
     return render(request, 'articles/detail.html', context)
 
 # update 하는 페이지 만들기
@@ -68,10 +74,28 @@ def update(request, article_pk):
         article.content = content
         article.save()
         return redirect('articles:detail', article.pk)
+        # return redirect('articles:detail', article_pk) 도 가능
 
     # GET으로 들어오면 UPDATE하기 위한 FORM만 제공하는 페이지 제공하기
     else:
         context = {'article': article}
         return render(request, 'articles/update.html', context)
+    
+def comments_create(request, article_pk):
+    # article_pk 에 해당하는 article에 새로운 comment 생성
+    article = get_object_or_404(Article, pk=article_pk)
+    if request.method == 'POST': 
+        # 생성 후, article detail page로 redirect
+        content = request.POST.get('content')
+        # 첫 article은 모델에 있는 arti, 두번째는 pk값으로 받아온 article
+        # Comment는 models class
+        comments = Comment(content=content, article=article)
+        comments.save()
+    #     return redirect('articles:detail', article.pk)
+    # else:  # GET 요청으로 들어왔을 때,
+    #     return redirect('articles:detail', article.pk)
+
+    # redirect 중복 작업 제거과정 if 되든 말든 redirect
+    return redirect('articles:detail', article.pk)
 
 

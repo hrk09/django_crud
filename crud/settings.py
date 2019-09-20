@@ -33,6 +33,7 @@ ALLOWED_HOSTS = []
 INSTALLED_APPS = [
     # 적는 순서도 중요한 부분
     'articles',
+    'jobs',
 
     'django.contrib.admin',
     'django.contrib.auth',

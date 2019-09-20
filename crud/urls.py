@@ -17,6 +17,7 @@ from django.contrib import admin
 from django.urls import path, include
 
 urlpatterns = [
+    path('jobs/', include('jobs.urls')),
     # articles로 들어왔다면 articles/urls.py로 이동하라는 명령
     path('articles/', include('articles.urls')),
     path('admin/', admin.site.urls),

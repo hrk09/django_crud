@@ -1,0 +1,8 @@
+{% extends 'base.html' %}
+
+{% block title %}PAST JOB{% endblock title %}
+
+{% block body %}
+  <h1>{{ job.name }}님의 전생 직업 결과: <span style="color: blue">{{ job.past_job }}</span></h1>
+  <a href=" {% url 'jobs:name' %} ">[뒤로가기]</a>
+{% endblock body %}

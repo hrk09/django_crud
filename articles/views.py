@@ -1,4 +1,4 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 # redirect 를 통해 article 저장 후 어떤 인덱스 페이지로 이동하세요
 from .models import Article
 
@@ -13,33 +13,65 @@ def index(request):
     return render(request, 'articles/index.html', context)
 
 # 입력 페이지
+# GET /articles/create/
 def new(request):
     return render(request, 'articles/new.html')
 
 # 데이터를 전달 받아서 article 생성
+# POST /articles/create/
 def create(request):
-    # articles/new/의 new.html의 form에서 전달받은 데이터들
-    title = request.GET.get('title')
-    content = request.GET.get('content')
-
-    article = Article()
-    article = Article(title=title, content=content)
-    article.save()
-    # article이 생성되면, pk를 쓸 수 있으니까, 해당 pk의 상세페이지 보여주기
-    # return redirect(f'/articles/{article.pk}/')
-    return redirect('articles:detail', article.pk)
+    # 만약 POST 요청으로 들어오면 html 페이지 랜더링
+    if request.method == 'POST':
+        # articles/new/의 new.html의 form에서 전달받은 데이터들
+        title = request.POST.get('title')
+        content = request.POST.get('content')
+        article = Article()
+        article = Article(title=title, content=content)
+        article.save()
+        # article이 생성되면, pk를 쓸 수 있으니까, 해당 pk의 상세페이지 보여주기
+        # return redirect(f'/articles/{article.pk}/')
+        return redirect('articles:detail', article.pk)
+    # 아니라면 (GET일 경우) 사용자 데이터 받아서 article 생성
+    else:
+        return render(request, 'articles/create.html')
 
 # 사용자로부터 받은 article_pk 값으로 article_pk 값에 해당하는 article 삭제
 def delete(request, article_pk):
-    article = Article.objects.get(pk=article_pk)
-    article.delete()
-    # return redirect('/articles/')
-    return redirect('articles:index') # 첫 페이지로 갈 쑤 있게
+    # article = Article.objects.get(pk=article_pk)
+    article = get_object_or_404(Article, pk=article_pk)
+    if request.method == 'POST':
+        article.delete()
+        # return redirect('/articles/')
+        return redirect('articles:index') # 첫 페이지로 갈 쑤 있게
+    else:
+        return redirect('articles:detail', article_pk)
 
 # variable routing으로 사용자가 보기 원하는 페이지 pk 받아서 detail 페이지 보여주기
 def detail(request, article_pk):
+    article = get_object_or_404(Article, pk=article_pk)
     # SELECT * FROM articles WHERE pk=3와 같은 의미
-    article = Article.objects.get(pk=article_pk)
+    # article = Article.objects.get(pk=article_pk)
+
     # pk 번호 맞춰서 데이터 가져온다
     context = {'article': article}
     return render(request, 'articles/detail.html', context)
+
+# update 하는 페이지 만들기
+def update(request, article_pk):
+    article = get_object_or_404(Article, pk=article_pk)
+    # POST로 들어오면 UPDATE 로직수행
+    if request.method == 'POST':
+        title = request.POST.get('title')
+        content = request.POST.get('content')
+
+        article.title = title
+        article.content = content
+        article.save()
+        return redirect('articles:detail', article.pk)
+
+    # GET으로 들어오면 UPDATE하기 위한 FORM만 제공하는 페이지 제공하기
+    else:
+        context = {'article': article}
+        return render(request, 'articles/update.html', context)
+
+

@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+
+{% block title %}New Article{% endblock title %}
+
+{% block body %}
+  <h1>New Article</h1>
+  {% comment %} 기본적으로 method 는 default 값이 GET임 {% endcomment %}
+  <form action=" {% url 'articles:create' %} " method="POST">
+  {% comment %} 제 3자로부터 해킹 못 당하게 {% endcomment %}
+  {% csrf_token %}
+  <input type="text" name="title"><br>
+  <textarea name="content" cols="30" rows="10"></textarea><br>
+  <button type="submit">생성하기</button>
+  <a href=" {% url 'articles:index' %} ">[뒤로가기]</a>
+  </form>
+{% endblock body %}

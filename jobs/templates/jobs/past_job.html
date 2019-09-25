@@ -1,8 +1,12 @@
 {% extends 'base.html' %}
-
+{% load static %}
 {% block title %}PAST JOB{% endblock title %}
 
 {% block body %}
   <h1>{{ job.name }}님의 전생 직업 결과: <span style="color: blue">{{ job.past_job }}</span></h1>
+  {% if job.profile_image %}
+  {% comment %} url: 이미지 경로 가져오는 과정 {% endcomment %}
+  <img src="{{ job.profile_image.url }}" alt="{{ job.profile_image}}"><br>
+  {% endif %}
   <a href=" {% url 'jobs:name' %} ">[뒤로가기]</a>
 {% endblock body %}

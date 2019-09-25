@@ -1,4 +1,5 @@
 {% extends 'base.html' %}
+{% load static %}
 
 {% block title %}NAME{% endblock title %}
 
@@ -6,9 +7,12 @@
 <h1>전생 직업 찾기</h1>
 {% comment %} jobs는 app_name  {% endcomment %}
 {% comment %} action에 아무것도 넣지 않으면, 현재 url(/jobs/)로 요청 보냄(GET) {% endcomment %}
-<form action="{% url 'jobs:past_job' %}" method="POST">
+<form action="{% url 'jobs:past_job' %}" method="POST" enctype="multipart/form-data">
   {% csrf_token %}
-  <input type="text" placeholder="이름을 입력해주세요." name="name">
-  <button type="submit">[찾아보기]</button>
+  <input type="text" placeholder="이름을 입력해주세요." name="name"><br>
+  <label for="profile_image">프로필이미지: </label>
+  {% comment %} accept: input type을 file로 하면 이미지, 영상, 음악 파일 다 들어감 그래서 accept로 images 만 받아오도록 해야 함 {% endcomment %}
+  <input type="file" name="profile_image" id="profile_image" accept="images/*"><br>
+  <button type="submit">찾아보기</button>
 </form>
 {% endblock body %}

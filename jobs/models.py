@@ -4,6 +4,7 @@ from django.db import models
 class Job(models.Model):
     name = models.CharField(max_length=20)
     past_job = models.TextField()
+    profile_image = models.ImageField(blank=True)
 # 모델 정의 하자마자 DB 작업
     # JOB의 데이터가 어떻게 정의되는 지 알려주는 함수
     def __str__(self):

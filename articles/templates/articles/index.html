@@ -13,6 +13,9 @@
   <hr>
   {% for article in articles %}
   <div>
+    {% if article.image %}
+    <img src="{{ article.image_thumbnail.url }}" alt="{{ article.image_thumbnail }}">
+    {% endif %}
     <h3><a href=" {% url 'articles:detail' article.pk %} ">{{ article.pk }}. {{ article.title }}</a></h3>
     <p>{{ article.content }}</p>
     <br>

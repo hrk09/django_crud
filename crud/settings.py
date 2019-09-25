@@ -37,6 +37,7 @@ INSTALLED_APPS = [
 
     # Third pary apps
     'django_extensions',
+    'imagekit',
 
     # Django apps
     'django.contrib.admin',

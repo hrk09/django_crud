@@ -19,7 +19,14 @@
   {% comment %} 여러개의 데이터를 돌면서 하나씩 표시 {% endcomment %}
   <ul>
   {% for comment in comments %}
-    <li>{{ comment.content }}</li>
+    <li>
+      {{ comment.content }}
+      {% comment %} 댓글마다의 삭제버튼 생성 {% endcomment %}
+      <form action="{% url 'articles:comments_delete' article.pk comment.pk %}" method="POST">
+        {% csrf_token %}
+        <button type="submit">삭제하기</button>
+      </form>
+    </li>
   {% empty %}
     <p>아직 댓글이 없어영 :(</p>
   {% endfor %}

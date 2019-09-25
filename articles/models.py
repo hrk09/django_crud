@@ -11,7 +11,9 @@ class Article(models.Model):
 # 1:N 관계 데이터 모델링 작업(1; article 이 먼저 선언되어야 N: comment 작업을 할 수 있음)
 class Comment(models.Model):
     # on_delete=models.CASCADE == 'Article 이 삭제되면 Comment도 함께 삭제'
-    article = models.ForeignKey(Article, on_delete=models.CASCADE)
+    # article.comments를 쓰고싶으면 원래는 articles.comment_set으로 쓰지만, related_name 설정하면 됨
+    # relate_name == 'Article instance가 comment를 역참조할 수 있는 이름을 정의'
+    article = models.ForeignKey(Article, on_delete=models.CASCADE, related_name='comments')
     content = models.CharField(max_length=200)
     # 데이터가 추가됐을 때만, 시간 추가 auto_now_add
     crated_at = models.DateTimeField(auto_now_add=True)

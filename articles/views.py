@@ -53,7 +53,8 @@ def detail(request, article_pk):
     # article = Article.objects.get(pk=article_pk)
 
     # 데이터 꺼내는 작업
-    comments = article.comment_set.all()
+    # comments = article.comment_set.all()
+    comments = article.comments.all()
 
     # pk 번호 맞춰서 데이터 가져온다
     context = {
@@ -87,8 +88,10 @@ def comments_create(request, article_pk):
     if request.method == 'POST': 
         # 생성 후, article detail page로 redirect
         content = request.POST.get('content')
-        # 첫 article은 모델에 있는 arti, 두번째는 pk값으로 받아온 article
+        # 첫 article은 모델에 있는 article, 두번째는 pk값으로 받아온 article
         # Comment는 models class
+        # comment.article = article은 어떤 article의 comment 인지 알려주기 위한 작업들(article_id나 article이나 쌤쌤)
+        # comments.article_id = article_pk 랑 같음
         comments = Comment(content=content, article=article)
         comments.save()
     #     return redirect('articles:detail', article.pk)
@@ -98,4 +101,13 @@ def comments_create(request, article_pk):
     # redirect 중복 작업 제거과정 if 되든 말든 redirect
     return redirect('articles:detail', article.pk)
 
+def comments_delete(request, article_pk, comment_pk):
+    # POST 요청으로 들어올 때 댓글 삭제 실행
+    if request.method == 'POST':
+        # comment_pk에 해당하는 댓글 삭제
+        comment = get_object_or_404(Comment, pk=comment_pk)
+        # comment가 있으면,
+        comment.delete()
 
+    # 댓글 삭제 후, detail 페이지로 이동
+    return redirect('articles:detail', article_pk)

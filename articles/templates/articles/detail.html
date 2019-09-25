@@ -6,6 +6,11 @@
   <h1>{{ article.title }}</h1>
   <p>작성일 : {{ article.created_at }}</p>
   <hr>
+   {% comment %} 저장했던 이미지가 있다면, image 경로를 가져오겠다.{% endcomment %}
+  {% if article.image %}
+  <img src="{{ article.image.url }}" alt="{{ article.image }}"> 
+  {% endif %}
+
   <p>{{ article.content }}</p>
   <hr>
   <h4>Comments</h4>

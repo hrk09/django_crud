@@ -5,11 +5,16 @@
 {% block body %}
   <h1>New Article</h1>
   {% comment %} 기본적으로 method 는 default 값이 GET임 {% endcomment %}
-  <form action=" {% url 'articles:create' %} " method="POST">
+  <form action=""></form>
+  <form action=" {% url 'articles:create' %} " method="POST" enctype="multipart/form-data">
   {% comment %} 제 3자로부터 해킹 못 당하게 {% endcomment %}
   {% csrf_token %}
   <input type="text" name="title"><br>
   <textarea name="content" cols="30" rows="10"></textarea><br>
+  <label for="image">이미지: </label>
+  {% comment %} input 속성에는 name이 꼭 있어야 함 {% endcomment %}
+  {% comment %} accept: image 폴더 안에 있는 것만 받는 설정 {% endcomment %}
+  <input type="file" name="image" id="image" accept="image/*"><br>
   <button type="submit">생성하기</button>
   <a href=" {% url 'articles:index' %} ">[뒤로가기]</a>
   </form>

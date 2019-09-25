@@ -4,7 +4,11 @@ from django.db import models
 
 class Article(models.Model):
     title = models.CharField(max_length=20)
-    content = models.TextField()
+    content = models.TextField()  # 문자열 빈값 저장은 null이 아니라 '' 따라서 문자열 값은 null=True 넣지 말기!(이 외의 경우는 null=True)
+    # 빈값(blank)이 들어와서 저장되는걸 허용함
+    # blank : 데이터 유효성과 관련됨 (blank True는 즉, 그 값은 필수가 아니야)
+    # null : 실제 DB 와 관련됨
+    image = models.ImageField(blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 

@@ -25,8 +25,10 @@ def create(request):
         # articles/new/의 new.html의 form에서 전달받은 데이터들
         title = request.POST.get('title')
         content = request.POST.get('content')
+        # image는 POST에서부터 가져온게 아니라 업로드 된 FILES에서 가져오는 것
+        image = request.FILES.get('image')
         # article = Article()
-        article = Article(title=title, content=content)
+        article = Article(title=title, content=content, image=image)
         article.save()
         # article이 생성되면, pk를 쓸 수 있으니까, 해당 pk의 상세페이지 보여주기
         # return redirect(f'/articles/{article.pk}/')
@@ -70,7 +72,11 @@ def update(request, article_pk):
     if request.method == 'POST':
         title = request.POST.get('title')
         content = request.POST.get('content')
-
+        image = request.FILES.get('image')
+        # 수정할 이미지가 있는 경우에만 image를 article에 넣고 저장한다.
+        if image:
+            article.image = image
+            
         article.title = title
         article.content = content
         article.save()

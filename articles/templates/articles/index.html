@@ -1,11 +1,15 @@
 {% extends 'base.html' %}
+{% load static %}
+{% comment %} load static: static 파일 불러올게요 {% endcomment %}
+{% comment %} extends 보다는 하위에 위치시킴 {% endcomment %}
 
 {% block title %}Articles{% endblock title %}
 
 {% block body %}
   <h1>Articles</h1>
   {% comment %} <a href="/articles/new/">[작성하기]</a> {% endcomment %}
-  <a href=" {% url 'articles:create' %} ">[작성하기]</a>
+  <a href=" {% url 'articles:create' %} ">[작성하기]</a><br>
+  <img src="{% static 'articles/images/수미니.jpg' %}" alt="수미니">
   <hr>
   {% for article in articles %}
   <div>
